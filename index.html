@@ -443,11 +443,11 @@
         let timer;
         let timeLeft = 30;
         const ADMIN_PASSWORD = "admin123";
-        const STORAGE_KEY_PLAYERS = "quizz_players";
-        const STORAGE_KEY_ANSWERS = "quizz_answers";
-        const STORAGE_KEY_SCORES = "quizz_scores";
-        const STORAGE_KEY_GAME_STARTED = "quizz_game_started";
-        const STORAGE_KEY_CURRENT_QUESTION = "quizz_current_question";
+        const STORAGE_KEY_PLAYERS = "quizz_players_" + Math.random().toString(36).substring(2, 9); // Clé unique pour éviter les conflits
+        const STORAGE_KEY_ANSWERS = "quizz_answers_" + Math.random().toString(36).substring(2, 9);
+        const STORAGE_KEY_SCORES = "quizz_scores_" + Math.random().toString(36).substring(2, 9);
+        const STORAGE_KEY_GAME_STARTED = "quizz_game_started_" + Math.random().toString(36).substring(2, 9);
+        const STORAGE_KEY_CURRENT_QUESTION = "quizz_current_question_" + Math.random().toString(36).substring(2, 9);
 
         // ========== ÉLÉMENTS DOM ==========
         const welcomeDiv = document.getElementById('welcome');
@@ -482,9 +482,8 @@
             const storedAnswers = localStorage.getItem(STORAGE_KEY_ANSWERS);
             if (storedAnswers) answers = JSON.parse(storedAnswers);
 
-            // NE PAS charger gameStarted depuis le localStorage pour éviter que les joueurs lancent le quizz sans l'admin
-            // const storedGameStarted = localStorage.getItem(STORAGE_KEY_GAME_STARTED);
-            // if (storedGameStarted) gameStarted = JSON.parse(storedGameStarted);
+            const storedGameStarted = localStorage.getItem(STORAGE_KEY_GAME_STARTED);
+            if (storedGameStarted) gameStarted = JSON.parse(storedGameStarted);
 
             const storedCurrentQuestion = localStorage.getItem(STORAGE_KEY_CURRENT_QUESTION);
             if (storedCurrentQuestion) currentQuestion = JSON.parse(storedCurrentQuestion);
@@ -495,8 +494,7 @@
             localStorage.setItem(STORAGE_KEY_PLAYERS, JSON.stringify(players));
             localStorage.setItem(STORAGE_KEY_SCORES, JSON.stringify(scores));
             localStorage.setItem(STORAGE_KEY_ANSWERS, JSON.stringify(answers));
-            // NE PAS sauvegarder gameStarted pour éviter que les joueurs lancent le quizz sans l'admin
-            // localStorage.setItem(STORAGE_KEY_GAME_STARTED, JSON.stringify(gameStarted));
+            localStorage.setItem(STORAGE_KEY_GAME_STARTED, JSON.stringify(gameStarted));
             localStorage.setItem(STORAGE_KEY_CURRENT_QUESTION, JSON.stringify(currentQuestion));
         }
 
@@ -511,15 +509,14 @@
                 answers = JSON.parse(e.newValue) || {};
                 updateAnswersList();
             }
-            // NE PAS écouter gameStarted depuis le localStorage pour éviter que les joueurs lancent le quizz sans l'admin
-            // if (e.key === STORAGE_KEY_GAME_STARTED) {
-            //     gameStarted = JSON.parse(e.newValue) || false;
-            //     if (gameStarted && !adminConnected) {
-            //         waitingRoomDiv.classList.add('hidden');
-            //         quizDiv.classList.remove('hidden');
-            //         showQuestion();
-            //     }
-            // }
+            if (e.key === STORAGE_KEY_GAME_STARTED) {
+                gameStarted = JSON.parse(e.newValue) || false;
+                if (gameStarted && !adminConnected) {
+                    waitingRoomDiv.classList.add('hidden');
+                    quizDiv.classList.remove('hidden');
+                    showQuestion();
+                }
+            }
             if (e.key === STORAGE_KEY_CURRENT_QUESTION) {
                 currentQuestion = JSON.parse(e.newValue) || 0;
                 if (gameStarted && !adminConnected) {
@@ -556,6 +553,7 @@
         function backToWelcome() {
             adminConnected = false;
             gameStarted = false;
+            currentQuestion = 0;
             adminPanelDiv.classList.add('hidden');
             adminLoginDiv.classList.add('hidden');
             resultsDiv.classList.add('hidden');
@@ -584,8 +582,12 @@
                 saveToStorage();
             }
             welcomeDiv.classList.add('hidden');
-            // TOUJOURS aller en salle d'attente, même si gameStarted est true (pour éviter que les joueurs lancent le quizz sans l'admin)
-            waitingRoomDiv.classList.remove('hidden');
+            if (gameStarted) {
+                quizDiv.classList.remove('hidden');
+                showQuestion();
+            } else {
+                waitingRoomDiv.classList.remove('hidden');
+            }
             updateWaitingRoom();
             updateAdminPanel();
         }
@@ -750,17 +752,12 @@
             answers = {};
             gameStarted = false;
             currentQuestion = 0;
+            saveToStorage();
             adminPanelDiv.classList.add('hidden');
             quizDiv.classList.add('hidden');
             resultsDiv.classList.add('hidden');
             waitingRoomDiv.classList.add('hidden');
             welcomeDiv.classList.remove('hidden');
-            // Réinitialiser le localStorage
-            localStorage.removeItem(STORAGE_KEY_PLAYERS);
-            localStorage.removeItem(STORAGE_KEY_ANSWERS);
-            localStorage.removeItem(STORAGE_KEY_SCORES);
-            localStorage.removeItem(STORAGE_KEY_GAME_STARTED);
-            localStorage.removeItem(STORAGE_KEY_CURRENT_QUESTION);
             updateAdminPanel();
         }
 
@@ -785,8 +782,13 @@
             if (adminConnected) {
                 adminPanelDiv.classList.remove('hidden');
                 updateAdminPanel();
+            } else if (gameStarted) {
+                quizDiv.classList.remove('hidden');
+                showQuestion();
+            } else if (players.includes(playerName)) {
+                waitingRoomDiv.classList.remove('hidden');
+                updateWaitingRoom();
             } else {
-                // TOUJOURS aller en salle d'attente si le joueur n'est pas admin
                 welcomeDiv.classList.remove('hidden');
             }
         };
