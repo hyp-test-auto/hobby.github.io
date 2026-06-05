@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quizz Team Building - Maroc vs France</title>
+    <style>
+        :root {
+            --primary: #6e8efb;
+            --secondary: #a777e3;
+            --success: #4caf50;
+            --danger: #f44336;
+            --warning: #ff9800;
+        }
+        body {
+            font-family: 'Comic Sans MS', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: #333;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 30px;
+            width: 90%;
+            max-width: 700px;
+            margin: 20px;
+            text-align: center;
+            position: relative;
+        }
+        h1 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-size: 28px;
+        }
+        h2 {
+            color: var(--secondary);
+            margin: 15px 0;
+        }
+        input, button, select {
+            padding: 12px;
+            margin: 10px 0;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            font-size: 16px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        button {
+            background: var(--primary);
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            border: none;
+        }
+        button:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        .question {
+            margin: 20px 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .option {
+            background: #f0f4ff;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-weight: bold;
+        }
+        .option:hover {
+            background: #e0e7ff;
+            border-color: var(--primary);
+            transform: translateX(5px);
+        }
+        .option.selected {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        .option.correct {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+        .option.incorrect {
+            background: var(--danger);
+            color: white;
+            border-color: var(--danger);
+        }
+        .timer {
+            font-size: 24px;
+            color: var(--danger);
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        .emoji {
+            font-size: 32px;
+            margin: 10px 0;
+        }
+        .hidden {
+            display: none;
+        }
+        .progress-container {
+            width: 100%;
+            background: #eee;
+            border-radius: 10px;
+            margin: 15px 0;
+            height: 15px;
+        }
+        .progress-bar {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.5s;
+        }
+        .scoreboard {
+            text-align: left;
+            margin: 20px 0;
+        }
+        .scoreboard ul {
+            list-style: none;
+            padding: 0;
+        }
+        .scoreboard li {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9f9f9;
+            margin: 5px 0;
+            border-radius: 8px;
+        }
+        .scoreboard li:first-child {
+            background: gold;
+            font-weight: bold;
+        }
+        .scoreboard li:nth-child(2) {
+            background: silver;
+        }
+        .scoreboard li:nth-child(3) {
+            background: #cd7f32;
+            color: white;
+        }
+        .admin-panel {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: left;
+        }
+        .admin-panel h3 {
+            color: var(--danger);
+            margin-top: 0;
+        }
+        .player-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 15px 0;
+        }
+        .player-badge {
+            background: var(--primary);
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .joke {
+            font-style: italic;
+            color: #666;
+            margin: 10px 0;
+        }
+        .logo {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+        .admin-controls {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Page d'accueil -->
+    <div class="container" id="welcome">
+        <div class="logo">🤖🇲🇦 vs 🇫🇷</div>
+        <h1>Quizz Team Building : Maroc vs France</h1>
+        <p>Prêt à tester tes connaissances en <strong>automatisation</strong> et en <strong>culture</strong> ?</p>
+        <p class="joke">"Pourquoi les testeurs automatisés n'ont-ils jamais peur ? Parce qu'ils savent toujours <em>catch</em> les bugs !" 😄</p>
+        <input type="text" id="playerName" placeholder="Ton prénom (ex: Ahmed, Jean, Fatima...)">
+        <button onclick="joinQuiz()">Rejoindre le quizz</button>
+        <div style="margin-top: 20px;">
+            <p>Tu es l'admin ? <button onclick="showAdminLogin()" style="display: inline; width: auto; padding: 5px 10px;">Se connecter</button></p>
+        </div>
+    </div>
+
+    <!-- Page de login admin -->
+    <div class="container hidden" id="adminLogin">
+        <h1>🔐 Espace Admin</h1>
+        <p>Mot de passe (par défaut : <code>admin123</code>)</p>
+        <input type="password" id="adminPassword" placeholder="Mot de passe...">
+        <button onclick="adminLogin()">Se connecter</button>
+        <button onclick="backToWelcome()" style="background: #666;">Retour</button>
+    </div>
+
+    <!-- Page d'attente -->
+    <div class="container hidden" id="waitingRoom">
+        <div class="logo">⏳</div>
+        <h1>Salle d'attente</h1>
+        <p>En attente que l'admin lance le quizz...</p>
+        <div class="player-list" id="playerList"></div>
+        <p class="joke">"Un testeur entre dans un bar, commande 10 bières, 5 cafés, 3 jus... et vérifie que le serveur ne plante pas. 🍻"</p>
+    </div>
+
+    <!-- Page admin -->
+    <div class="container hidden" id="adminPanel">
+        <div class="logo">👑</div>
+        <h1>Panneau Admin</h1>
+        <div class="admin-panel">
+            <h3>Joueurs connectés :</h3>
+            <div class="player-list" id="adminPlayerList"></div>
+        </div>
+        <div class="admin-controls">
+            <button onclick="startGame()" id="startBtn" disabled>🚀 Lancer le quizz</button>
+            <button onclick="showResults()" id="resultsBtn" disabled>📊 Afficher les résultats</button>
+            <button onclick="resetGame()" style="background: var(--danger);">🔄 Réinitialiser</button>
+        </div>
+        <div class="admin-panel" id="liveAnswers">
+            <h3>Réponses en direct :</h3>
+            <div id="answersList"></div>
+        </div>
+    </div>
+
+    <!-- Page du quizz -->
+    <div class="container hidden" id="quiz">
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <h1 id="quizTitle">Question 1/20</h1>
+        <div class="timer">⏳ <span id="timeLeft">30</span> secondes</div>
+        <div class="question" id="questionText">...</div>
+        <div class="emoji" id="questionEmoji">🤔</div>
+        <div class="options" id="optionsContainer"></div>
+        <button class="hidden" id="nextBtn" onclick="nextQuestion()">Suivant →</button>
+    </div>
+
+    <!-- Page des résultats -->
+    <div class="container hidden" id="results">
+        <div class="logo">🎉</div>
+        <h1>Résultats finaux !</h1>
+        <p class="joke">"Pourquoi les développeurs confondent-ils Noël et Halloween ? Parce que DEC 25 = OCT 31 ! 🎄👻"</p>
+        <div class="scoreboard" id="scoreboard"></div>
+        <button onclick="backToWelcome()">Retour à l'accueil</button>
+    </div>
+
+    <script>
+        // ========== DONNÉES ==========
+        const quizData = [
+            // Culture Maroc (avec humour)
+            {
+                question: "Quel est le plat marocain qui fait pleurer les Français quand ils essaient de le prononcer ?",
+                options: ["Tajine", "Couscous", "Tangia", "Rfissa"],
+                correct: 2,
+                emoji: "😂",
+                joke: "Tangia ? Non, c'est pas un juron !"
+            },
+            {
+                question: "Que répond un Marocain quand on lui demande 'Ça va ?' ?",
+                options: ["Oui", "Non", "Labas, hamdoullah", "Bof"],
+                correct: 2,
+                emoji: "🙏",
+                joke: "Hamdoullah = le mot magique qui résout tout."
+            },
+            {
+                question: "Quel est le sport national du Maroc (selon les taxis) ?",
+                options: ["Football", "Klaxon", "Slalom entre les piétons", "Course de grands taxis"],
+                correct: 3,
+                emoji: "🚗💨",
+                joke: "Spoiler : ils gagnent toujours."
+            },
+            {
+                question: "Quelle est la vitesse moyenne d'un piéton à Casablanca ?",
+                options: ["5 km/h", "10 km/h", "20 km/h", "Plus vite qu'un taxi !"],
+                correct: 3,
+                emoji: "🏃‍♂️",
+                joke: "La preuve : ils traversent les autoroutes à pied."
+            },
+            {
+                question: "Quel est l'ingrédient secret du thé à la menthe marocain ?",
+                options: ["Menthe", "Sucre", "Amour", "Trop de sucre"],
+                correct: 3,
+                emoji: "🍬",
+                joke: "Diabétique ? Passez votre chemin."
+            },
+
+            // Culture France (avec humour)
+            {
+                question: "Que fait un Français quand son code ne marche pas ?",
+                options: ["Il relance", "Il boit un café", "Il fait la grève", "Il dit 'C'est normal'"],
+                correct: 1,
+                emoji: "☕",
+                joke: "Le café = solution à 90% des bugs."
+            },
+            {
+                question: "Quel est le plat préféré des Français au Maroc ?",
+                options: ["Tajine", "Kebab", "Baguette (même au Maroc)", "Fromage"],
+                correct: 2,
+                emoji: "🥖",
+                joke: "Même à Marrakech, ils trouvent une boulangerie."
+            },
+            {
+                question: "Comment un Français salue-t-il un Marocain ?",
+                options: ["Bonjour", "Salam", "Bslama", "Avec un bisou (même si c'est un inconnu)"],
+                correct: 3,
+                emoji: "💋",
+                joke: "La bise : le sport national français."
+            },
+            {
+                question: "Quel est le mot français le plus utilisé au Maroc ?",
+                options: ["Merci", "Pardon", "Oh la vache", "Putain"],
+                correct: 2,
+                emoji: "🐄",
+                joke: "Même les chameaux disent 'Oh la vache'."
+            },
+            {
+                question: "Que répond un Français quand on lui demande de travailler un week-end ?",
+                options: ["Oui", "Non", "Peut-être", "C'est contre la loi !"],
+                correct: 3,
+                emoji: "🚫",
+                joke: "Le code du travail > le code informatique."
+            },
+
+            // Automatisation des tests (avec humour)
+            {
+                question: "Quel est le test le plus fiable selon les développeurs ?",
+                options: ["Le test unitaire", "Le test d'intégration", "Le test manuel", "Le test 'Ça marche chez moi'"],
+                correct: 3,
+                emoji: "🏡",
+                joke: "Spoiler : ça ne marche jamais chez les autres."
+            },
+            {
+                question: "Pourquoi les testeurs automatisés n'ont-ils pas d'amis ?",
+                options: ["Ils sont trop occupés", "Ils parlent en code", "Ils cassent tout", "Ils disent toujours 'Non'"],
+                correct: 3,
+                emoji: "🚫",
+                joke: "Leur réponse préférée : 'Bug confirmé'."
+            },
+            {
+                question: "Quel est l'outil préféré des testeurs paresseux ?",
+                options: ["Selenium", "Manual Testing", "JIRA", "Ctrl+C / Ctrl+V"],
+                correct: 3,
+                emoji: "📋",
+                joke: "Le copier-coller : l'automatisation version 1990."
+            },
+            {
+                question: "Que fait un test automatisé quand il trouve un bug ?",
+                options: ["Il le corrige", "Il envoie un mail", "Il pleure", "Il fail et attend qu'on le regarde"],
+                correct: 3,
+                emoji: "😢",
+                joke: "Le bug : 'Regardez-moi !' *sonne comme un enfant gâté*"
+            },
+            {
+                question: "Quel est le langage de programmation le plus utilisé pour les tests automatisés ?",
+                options: ["Java", "Python", "JavaScript", "Le langage des pleurs"],
+                correct: 1,
+                emoji: "🐍",
+                joke: "Python : parce que même les serpents savent coder."
+            },
+
+            // Mix Maroc/France/Tests
+            {
+                question: "Quel est le point commun entre un testeur marocain et un testeur français ?",
+                options: ["Ils aiment le thé", "Ils aiment le café", "Ils râlent contre les bugs", "Ils disent 'Inchallah' quand le test plante"],
+                correct: 3,
+                emoji: "🤷‍♂️",
+                joke: "Inchallah = 'Ça marchera peut-être'."
+            },
+            {
+                question: "Comment un Marocain automatiserait-il un test ?",
+                options: ["Avec Selenium", "Avec un script Python", "Avec un cousin qui clique", "Avec de la patience et du thé"],
+                correct: 2,
+                emoji: "👨‍👩‍👧‍👦",
+                joke: "La famille = la meilleure équipe DevOps."
+            },
+            {
+                question: "Quel est le bug le plus fréquent dans les applications marocaines ?",
+                options: ["NullPointerException", "ArrayIndexOutOfBounds", "Le bouton 'Valider' ne marche pas", "Le site plante pendant le Ramadan"],
+                correct: 3,
+                emoji: "🕋",
+                joke: "True story."
+            },
+            {
+                question: "Que dirait un Français en voyant un test automatisé marocain ?",
+                options: ["C'est bien !", "C'est trop lent", "Pourquoi il y a un GIF de chameau ?", "C'est magique !"],
+                correct: 2,
+                emoji: "🐪",
+                joke: "Parce que oui, il y a un GIF de chameau."
+            },
+            {
+                question: "Quel est le meilleur framework pour tester la patience d'un développeur ?",
+                options: ["JUnit", "Selenium", "JIRA", "Un client qui change d'avis"],
+                correct: 3,
+                emoji: "😤",
+                joke: "Spoiler : le client gagne toujours."
+            }
+        ];
+
+        // ========== VARIABLES GLOBALES ==========
+        let currentQuestion = 0;
+        let playerName = "";
+        let players = [];
+        let scores = {};
+        let answers = {};
+        let gameStarted = false;
+        let adminConnected = false;
+        let timer;
+        let timeLeft = 30;
+        const ADMIN_PASSWORD = "admin123";
+        const STORAGE_KEY_PLAYERS = "quizz_players";
+        const STORAGE_KEY_ANSWERS = "quizz_answers";
+        const STORAGE_KEY_SCORES = "quizz_scores";
+        const STORAGE_KEY_GAME_STARTED = "quizz_game_started";
+        const STORAGE_KEY_CURRENT_QUESTION = "quizz_current_question";
+
+        // ========== ÉLÉMENTS DOM ==========
+        const welcomeDiv = document.getElementById('welcome');
+        const adminLoginDiv = document.getElementById('adminLogin');
+        const waitingRoomDiv = document.getElementById('waitingRoom');
+        const adminPanelDiv = document.getElementById('adminPanel');
+        const quizDiv = document.getElementById('quiz');
+        const resultsDiv = document.getElementById('results');
+        const playerListDiv = document.getElementById('playerList');
+        const adminPlayerListDiv = document.getElementById('adminPlayerList');
+        const answersListDiv = document.getElementById('answersList');
+        const questionText = document.getElementById('questionText');
+        const optionsContainer = document.getElementById('optionsContainer');
+        const nextBtn = document.getElementById('nextBtn');
+        const quizTitle = document.getElementById('quizTitle');
+        const timeLeftSpan = document.getElementById('timeLeft');
+        const questionEmoji = document.getElementById('questionEmoji');
+        const scoreboardDiv = document.getElementById('scoreboard');
+        const progressBar = document.getElementById('progressBar');
+        const startBtn = document.getElementById('startBtn');
+        const resultsBtn = document.getElementById('resultsBtn');
+
+        // ========== INITIALISATION ==========
+        // Charger les données depuis le localStorage
+        function loadFromStorage() {
+            const storedPlayers = localStorage.getItem(STORAGE_KEY_PLAYERS);
+            if (storedPlayers) players = JSON.parse(storedPlayers);
+
+            const storedScores = localStorage.getItem(STORAGE_KEY_SCORES);
+            if (storedScores) scores = JSON.parse(storedScores);
+
+            const storedAnswers = localStorage.getItem(STORAGE_KEY_ANSWERS);
+            if (storedAnswers) answers = JSON.parse(storedAnswers);
+
+            const storedGameStarted = localStorage.getItem(STORAGE_KEY_GAME_STARTED);
+            if (storedGameStarted) gameStarted = JSON.parse(storedGameStarted);
+
+            const storedCurrentQuestion = localStorage.getItem(STORAGE_KEY_CURRENT_QUESTION);
+            if (storedCurrentQuestion) currentQuestion = JSON.parse(storedCurrentQuestion);
+        }
+
+        // Sauvegarder les données dans le localStorage
+        function saveToStorage() {
+            localStorage.setItem(STORAGE_KEY_PLAYERS, JSON.stringify(players));
+            localStorage.setItem(STORAGE_KEY_SCORES, JSON.stringify(scores));
+            localStorage.setItem(STORAGE_KEY_ANSWERS, JSON.stringify(answers));
+            localStorage.setItem(STORAGE_KEY_GAME_STARTED, JSON.stringify(gameStarted));
+            localStorage.setItem(STORAGE_KEY_CURRENT_QUESTION, JSON.stringify(currentQuestion));
+        }
+
+        // Écouter les changements du localStorage
+        window.addEventListener('storage', (e) => {
+            if (e.key === STORAGE_KEY_PLAYERS) {
+                players = JSON.parse(e.newValue) || [];
+                updateWaitingRoom();
+                updateAdminPanel();
+            }
+            if (e.key === STORAGE_KEY_ANSWERS) {
+                answers = JSON.parse(e.newValue) || {};
+                updateAnswersList();
+            }
+            if (e.key === STORAGE_KEY_GAME_STARTED) {
+                gameStarted = JSON.parse(e.newValue) || false;
+                if (gameStarted && !adminConnected) {
+                    waitingRoomDiv.classList.add('hidden');
+                    quizDiv.classList.remove('hidden');
+                    showQuestion();
+                }
+            }
+            if (e.key === STORAGE_KEY_CURRENT_QUESTION) {
+                currentQuestion = JSON.parse(e.newValue) || 0;
+                if (gameStarted && !adminConnected) {
+                    showQuestion();
+                }
+            }
+        });
+
+        // Charger les données au démarrage
+        loadFromStorage();
+
+        // ========== FONCTIONS ==========
+
+        // Afficher la page de login admin
+        function showAdminLogin() {
+            welcomeDiv.classList.add('hidden');
+            adminLoginDiv.classList.remove('hidden');
+        }
+
+        // Connexion admin
+        function adminLogin() {
+            const password = document.getElementById('adminPassword').value;
+            if (password === ADMIN_PASSWORD) {
+                adminConnected = true;
+                adminLoginDiv.classList.add('hidden');
+                adminPanelDiv.classList.remove('hidden');
+                updateAdminPanel();
+            } else {
+                alert("Mot de passe incorrect ! (Indice : c'est 'admin123')");
+            }
+        }
+
+        // Retour à l'accueil
+        function backToWelcome() {
+            adminConnected = false;
+            gameStarted = false;
+            adminPanelDiv.classList.add('hidden');
+            adminLoginDiv.classList.add('hidden');
+            resultsDiv.classList.add('hidden');
+            quizDiv.classList.add('hidden');
+            waitingRoomDiv.classList.add('hidden');
+            welcomeDiv.classList.remove('hidden');
+            // Réinitialiser le localStorage
+            localStorage.removeItem(STORAGE_KEY_PLAYERS);
+            localStorage.removeItem(STORAGE_KEY_ANSWERS);
+            localStorage.removeItem(STORAGE_KEY_SCORES);
+            localStorage.removeItem(STORAGE_KEY_GAME_STARTED);
+            localStorage.removeItem(STORAGE_KEY_CURRENT_QUESTION);
+        }
+
+        // Rejoindre le quizz
+        function joinQuiz() {
+            playerName = document.getElementById('playerName').value.trim();
+            if (!playerName) {
+                alert("Veuillez saisir votre prénom !");
+                return;
+            }
+            if (!players.includes(playerName)) {
+                players.push(playerName);
+                scores[playerName] = 0;
+                answers[playerName] = [];
+                saveToStorage();
+            }
+            welcomeDiv.classList.add('hidden');
+            if (gameStarted) {
+                quizDiv.classList.remove('hidden');
+                showQuestion();
+            } else {
+                waitingRoomDiv.classList.remove('hidden');
+            }
+            updateWaitingRoom();
+            updateAdminPanel();
+        }
+
+        // Mettre à jour la salle d'attente
+        function updateWaitingRoom() {
+            playerListDiv.innerHTML = players.map(p => `<span class="player-badge">${p}</span>`).join('');
+        }
+
+        // Mettre à jour le panneau admin
+        function updateAdminPanel() {
+            adminPlayerListDiv.innerHTML = players.map(p => `<span class="player-badge">${p}</span>`).join('');
+            startBtn.disabled = players.length === 0;
+        }
+
+        // Lancer le quizz (admin)
+        function startGame() {
+            if (players.length === 0) {
+                alert("Aucun joueur connecté !");
+                return;
+            }
+            gameStarted = true;
+            currentQuestion = 0;
+            for (let p in players) {
+                if (!answers[p]) answers[p] = [];
+                if (!scores[p]) scores[p] = 0;
+            }
+            saveToStorage();
+            // Passer tout le monde en mode quizz
+            waitingRoomDiv.classList.add('hidden');
+            quizDiv.classList.remove('hidden');
+            // L'admin reste sur son panneau pour suivre les réponses
+            adminPanelDiv.classList.remove('hidden');
+            startBtn.disabled = true;
+            resultsBtn.disabled = true;
+            showQuestion();
+        }
+
+        // Afficher une question
+        function showQuestion() {
+            if (currentQuestion >= quizData.length) {
+                endQuiz();
+                return;
+            }
+            const q = quizData[currentQuestion];
+            questionText.textContent = q.question;
+            questionEmoji.textContent = q.emoji;
+            quizTitle.textContent = `Question ${currentQuestion + 1}/${quizData.length}`;
+            optionsContainer.innerHTML = "";
+            nextBtn.classList.add('hidden');
+
+            q.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.classList.add('option');
+                optionDiv.textContent = option;
+                optionDiv.onclick = () => selectOption(index, optionDiv);
+                optionsContainer.appendChild(optionDiv);
+            });
+
+            // Mettre à jour la barre de progression
+            const progress = ((currentQuestion) / quizData.length) * 100;
+            progressBar.style.width = `${progress}%`;
+
+            startTimer();
+            updateAnswersList();
+        }
+
+        // Sélectionner une option
+        function selectOption(selectedIndex, element) {
+            const options = optionsContainer.querySelectorAll('.option');
+            options.forEach((option, index) => {
+                option.classList.remove('selected', 'correct', 'incorrect');
+                if (index === selectedIndex) {
+                    option.classList.add('selected');
+                }
+            });
+            nextBtn.classList.remove('hidden');
+            clearInterval(timer);
+
+            // Enregistrer la réponse
+            answers[playerName][currentQuestion] = {
+                selected: selectedIndex,
+                correct: selectedIndex === quizData[currentQuestion].correct,
+                time: 30 - timeLeft
+            };
+            saveToStorage();
+            updateAnswersList();
+        }
+
+        // Mettre à jour la liste des réponses en direct
+        function updateAnswersList() {
+            let html = "<ul>";
+            for (let p in answers) {
+                if (answers[p][currentQuestion]) {
+                    const ans = answers[p][currentQuestion];
+                    const q = quizData[currentQuestion];
+                    const isCorrect = ans.correct;
+                    html += `<li><strong>${p}</strong> a répondu : "${q.options[ans.selected]}" ${isCorrect ? '✅' : '❌'} (en ${ans.time}s)</li>`;
+                }
+            }
+            html += "</ul>";
+            answersListDiv.innerHTML = html || "<p>Aucune réponse pour l'instant.</p>";
+        }
+
+        // Passer à la question suivante
+        function nextQuestion() {
+            const selectedOption = document.querySelector('.option.selected');
+            if (!selectedOption) {
+                alert("Veuillez sélectionner une réponse !");
+                return;
+            }
+
+            const selectedIndex = Array.from(optionsContainer.children).indexOf(selectedOption);
+            const isCorrect = selectedIndex === quizData[currentQuestion].correct;
+
+            // Mettre à jour le score
+            if (isCorrect) {
+                scores[playerName]++;
+            }
+            saveToStorage();
+
+            currentQuestion++;
+            saveToStorage();
+            showQuestion();
+        }
+
+        // Terminer le quizz
+        function endQuiz() {
+            quizDiv.classList.add('hidden');
+            resultsDiv.classList.remove('hidden');
+            displayScores();
+            resultsBtn.disabled = false;
+        }
+
+        // Afficher les résultats (admin)
+        function showResults() {
+            adminPanelDiv.classList.add('hidden');
+            resultsDiv.classList.remove('hidden');
+            displayScores();
+        }
+
+        // Afficher les scores
+        function displayScores() {
+            // Trier les joueurs par score
+            const sortedPlayers = Object.entries(scores)
+                .map(([name, score]) => ({ name, score }))
+                .sort((a, b) => b.score - a.score);
+
+            let html = `<h2>Classement final (${quizData.length} questions)</h2><ul>`;
+            sortedPlayers.forEach((player, index) => {
+                const medal = index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "";
+                html += `<li><span>${medal} ${index + 1}. ${player.name}</span><span>${player.score} / ${quizData.length}</span></li>`;
+            });
+            html += "</ul>";
+            scoreboardDiv.innerHTML = html;
+        }
+
+        // Réinitialiser le jeu (admin)
+        function resetGame() {
+            players = [];
+            scores = {};
+            answers = {};
+            gameStarted = false;
+            currentQuestion = 0;
+            adminPanelDiv.classList.add('hidden');
+            quizDiv.classList.add('hidden');
+            resultsDiv.classList.add('hidden');
+            waitingRoomDiv.classList.add('hidden');
+            welcomeDiv.classList.remove('hidden');
+            // Réinitialiser le localStorage
+            localStorage.removeItem(STORAGE_KEY_PLAYERS);
+            localStorage.removeItem(STORAGE_KEY_ANSWERS);
+            localStorage.removeItem(STORAGE_KEY_SCORES);
+            localStorage.removeItem(STORAGE_KEY_GAME_STARTED);
+            localStorage.removeItem(STORAGE_KEY_CURRENT_QUESTION);
+            updateAdminPanel();
+        }
+
+        // Timer
+        function startTimer() {
+            timeLeft = 30;
+            timeLeftSpan.textContent = timeLeft;
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                timeLeftSpan.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    nextQuestion();
+                }
+            }, 1000);
+        }
+
+        // Mettre à jour les données au chargement de la page
+        window.onload = function() {
+            loadFromStorage();
+            if (adminConnected) {
+                adminPanelDiv.classList.remove('hidden');
+                updateAdminPanel();
+            } else if (gameStarted) {
+                quizDiv.classList.remove('hidden');
+                showQuestion();
+            } else if (players.includes(playerName)) {
+                waitingRoomDiv.classList.remove('hidden');
+                updateWaitingRoom();
+            }
+        };
+    </script>
+</body>
+</html>
