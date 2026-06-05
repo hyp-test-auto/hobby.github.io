@@ -283,94 +283,94 @@
     <script>
         // ========== DONNÉES ==========
         const quizData = [
-            // ===== CULTURE MAROCAINE (DÉCALÉE ET VRAIE) =====
+            // ===== CULTURE MAROCAINE (DÉCALÉE) =====
             {
-                question: "Quel est le mot le plus utilisé par un développeur marocain quand son code plante ?",
-                options: ["Allah ystour", "Inchallah", "Machi mouchkil, khassni nfasser", "C'est la faute à l'Internet de l'ONCF"],
-                correct: 2,
-                emoji: "😅",
-                joke: "Traduction : 'Pas de problème, je vais tout casser.'"
+                question: "Quel est le mot le plus utilisé par un Marocain quand son code ne marche pas ?",
+                options: ["Allah ystour", "Inchallah", "Machi mouchkil", "C'est la faute à l'Internet"],
+                correct: 1,
+                emoji: "🤷‍♂️",
+                joke: "Inchallah = 'Ça marchera peut-être... ou pas.'"
             },
             {
-                question: "Comment un Marocain résout-il un bug en production ?",
-                options: ["Il relance le serveur", "Il boit un thé à la menthe", "Il appelle son cousin 'expert en informatique'", "Il dit 'Inchallah, ça va se régler tout seul'"],
-                correct: 2,
-                emoji: "🍵💻",
-                joke: "Le cousin : le seul support technique 24/7 et gratuit."
+                question: "Comment un Marocain débogue-t-il son code ?",
+                options: ["Avec un print()", "En relançant l'IDE", "En buvant un thé à la menthe", "En criant 'YA RABBI !'"],
+                correct: 3,
+                emoji: "🍵💥",
+                joke: "Le thé à la menthe : le meilleur debugger du monde."
             },
             {
                 question: "Quel est le langage de programmation préféré des taxis marocains ?",
-                options: ["Python", "Java", "Klaxon 2.0", "Slalom entre les piétons"],
+                options: ["Python", "Java", "Klaxon++", "Slalom.js"],
                 correct: 2,
                 emoji: "🚗💨",
-                joke: "Klaxon 2.0 : compatible avec tous les systèmes d'exploitation (sauf les piétons)."
+                joke: "Klaxon++ : le seul langage où le 'Hello World' fait peur."
             },
             {
                 question: "Pourquoi les développeurs marocains aiment-ils le Ramadan ?",
-                options: ["Parce qu'ils jeûnent", "Parce qu'ils dorment la journée", "Parce que les clients ne répondent pas aux mails", "Parce que les bugs font le Ramadan aussi"],
-                correct: 2,
-                emoji: "🌙😴",
-                joke: "Le Ramadan : la seule période où les devs dorment plus que leur code."
+                options: ["Parce qu'ils jeûnent", "Parce qu'ils dorment la journée", "Parce que les bugs jeûnent aussi", "Parce que le client ne répond pas"],
+                correct: 3,
+                emoji: "🌙💻",
+                joke: "Les bugs font le Ramadan ? Dommage, ils reviennent à l'Aïd."
             },
             {
                 question: "Quel est le framework le plus utilisé au Maroc pour les tests ?",
-                options: ["Selenium", "JUnit", "Mon cousin qui clique 1000 fois", "Inchallah.js"],
+                options: ["Selenium", "JUnit", "Mon cousin qui clique", "Inchallah Framework"],
                 correct: 2,
                 emoji: "👨‍👩‍👧‍👦",
-                joke: "Mon cousin : le seul framework qui ne plante jamais (enfin, presque)."
+                joke: "Mon cousin = le seul QA qui ne coûte rien."
             },
 
-            // ===== CULTURE FRANÇAISE (STÉRÉOTYPES DÉCALÉS) =====
+            // ===== CULTURE FRANÇAISE (STÉRÉOTYPES) =====
             {
-                question: "Que fait un Français quand son test automatisé échoue en production ?",
-                options: ["Il relance", "Il boit un café en regardant par la fenêtre", "Il écrit un mail de 10 pages pour expliquer que c'est la faute à l'équipe Maroc", "Il fait la grève"],
+                question: "Que fait un Français quand son test automatisé échoue ?",
+                options: ["Il relance", "Il boit un café", "Il fait la grève", "Il écrit un mail de 10 pages"],
                 correct: 1,
-                emoji: "☕😌",
-                joke: "Le café : la solution à 99% des problèmes. Le 1% restant = le vin."
+                emoji: "☕📉",
+                joke: "Le café : la solution à 99% des problèmes (le 1% restant = le vin)."
             },
             {
-                question: "Quel est le plat préféré des développeurs français en télétravail ?",
-                options: ["Baguette", "Fromage", "Croissant du matin, baguette du midi, fromage du soir", "Le repas du self (parce que cuisiner, c'est trop long)"],
-                correct: 2,
-                emoji: "🥖🧀",
-                joke: "Un dev français : 3 repas par jour, 5 cafés, et 0 patience pour les bugs."
+                question: "Quel est le plat préféré des développeurs français ?",
+                options: ["Baguette", "Fromage", "Croissant", "Le repas du self"],
+                correct: 3,
+                emoji: "🥐",
+                joke: "Le croissant : le seul 'cache' que les devs français comprennent."
             },
             {
-                question: "Comment un Français salue-t-il un collègue marocain en réunion ?",
-                options: ["Bonjour", "Salam", "Bslama", "Avec un bisou (même en visio, même si c'est la première fois)"],
+                question: "Comment un Français salue-t-il un collègue en télétravail ?",
+                options: ["Bonjour", "Salut", "Bslama", "Avec un bisou virtuel (très bruyant)"],
                 correct: 3,
                 emoji: "💋🔊",
-                joke: "La bise : le seul langage universel en France."
+                joke: "Même en visio, la bise est obligatoire. *Bruit de bisou*"
             },
             {
-                question: "Quel est le mot préféré des Français en réunion quand un bug est trouvé ?",
-                options: ["On verra", "C'est pas moi", "C'est la faute à l'équipe offshore", "'C'est normal, c'est un bug connu'"],
-                correct: 2,
+                question: "Quel est le mot préféré des Français en réunion ?",
+                options: ["Oui", "Non", "On verra", "'C'est pas moi, c'est le client'"],
+                correct: 3,
                 emoji: "🤷‍♀️",
-                joke: "L'équipe offshore : le bouc émissaire préféré des Français."
+                joke: "Le client : le bouc émissaire préféré des devs."
             },
             {
                 question: "Pourquoi les Français n’aiment-ils pas les deadlines ?",
-                options: ["Parce qu'ils sont lents", "Parce que 'demain' est un concept très relatif", "Parce que la grève peut tomber", "Parce que le client va changer d'avis de toute façon"],
-                correct: 1,
+                options: ["Parce qu'ils sont lents", "Parce qu'ils aiment prendre leur temps", "Parce que 'demain' est un concept flou", "Parce que la grève peut tomber"],
+                correct: 2,
                 emoji: "⏳",
-                joke: "'Demain' en français = entre 3 jours et jamais. 'Urgent' = dans 2 semaines."
+                joke: "'Demain' en français = entre 3 jours et jamais."
             },
 
             // ===== AUTOMATISATION DES TESTS (HUMOUR GEEK) =====
             {
                 question: "Quel est le test le plus fiable selon les développeurs ?",
-                options: ["Le test unitaire", "Le test d'intégration", "Le test manuel", "Le test 'Ça marche chez moi, donc ça marche partout'"],
+                options: ["Le test unitaire", "Le test d'intégration", "Le test manuel", "Le test 'Ça marche chez moi'"],
                 correct: 3,
                 emoji: "🏡💥",
                 joke: "Spoiler : ça ne marche JAMAIS chez le client."
             },
             {
                 question: "Pourquoi les testeurs automatisés n’ont-ils pas d’amis ?",
-                options: ["Ils sont trop occupés à casser des trucs", "Ils parlent en code", "Ils disent toujours 'Non, c'est pas bon'", "Parce qu'ils passent leur temps à dire 'Bug confirmé'"],
+                options: ["Ils sont trop occupés", "Ils parlent en code", "Ils cassent tout", "Ils disent toujours 'Non'"],
                 correct: 3,
                 emoji: "🚫😤",
-                joke: "Leur phrase préférée : 'Bug confirmé. Bon courage pour le fix.'"
+                joke: "Leur phrase préférée : 'Bug confirmé. Bon courage.'"
             },
             {
                 question: "Quel est l’outil préféré des testeurs paresseux ?",
@@ -381,14 +381,14 @@
             },
             {
                 question: "Que fait un test automatisé quand il trouve un bug ?",
-                options: ["Il le corrige", "Il envoie un mail", "Il pleure en silence", "Il fail et attend qu’on le regarde en disant 'Je te l’avais dit'"],
+                options: ["Il le corrige", "Il envoie un mail", "Il pleure", "Il fail et attend qu’on le regarde"],
                 correct: 3,
                 emoji: "😢🐞",
                 joke: "Le bug : 'Regardez-moi !' *sonne comme un enfant gâté*"
             },
             {
-                question: "Quel est le langage de programmation le plus utilisé pour les tests automatisés ?",
-                options: ["Java", "Python", "JavaScript", "Le langage des pleurs et des 'Pourquoi ça marche pas ?'"],
+                question: "Quel est le langage de programmation le plus utilisé pour les tests ?",
+                options: ["Java", "Python", "JavaScript", "Le langage des pleurs"],
                 correct: 3,
                 emoji: "😭",
                 joke: "Python : parce que même les serpents savent coder... et pleurer."
@@ -397,38 +397,38 @@
             // ===== MIX MAROC/FRANCE/TESTS (DÉLIRE TOTAL) =====
             {
                 question: "Quel est le point commun entre un dev marocain et un dev français ?",
-                options: ["Ils aiment le thé/café", "Ils râlent contre les bugs", "Ils disent 'Inchallah'/'On verra' quand le test plante", "Ils blâment le client"],
-                correct: 2,
+                options: ["Ils aiment le thé", "Ils aiment le café", "Ils râlent contre les bugs", "Ils disent 'Inchallah' quand le test plante"],
+                correct: 3,
                 emoji: "🤝💻",
-                joke: "La seule différence : l'un dit 'Inchallah', l'autre dit 'On verra'. Résultat = le bug reste."
+                joke: "Inchallah = 'Ça marchera peut-être... ou pas, mais on verra demain.'"
             },
             {
                 question: "Comment un Marocain automatiserait-il un test ?",
-                options: ["Avec Selenium", "Avec un script Python", "Avec un cousin qui clique 1000 fois en buvant du thé", "Avec de la patience et beaucoup de 'Inchallah'"],
+                options: ["Avec Selenium", "Avec un script Python", "Avec un cousin qui clique 1000 fois", "Avec de la patience et du thé"],
                 correct: 2,
                 emoji: "👨‍👩‍👧‍👦🖱️",
-                joke: "La famille : la meilleure équipe DevOps (et elle travaille pour des clopes)."
+                joke: "La famille = la meilleure équipe DevOps (et elle travaille gratuitement)."
             },
             {
                 question: "Quel est le bug le plus fréquent dans les applications marocaines ?",
-                options: ["NullPointerException", "ArrayIndexOutOfBounds", "Le bouton 'Valider' ne marche pas (mais 'Annuler' si)", "Le site plante pendant le Ramadan ou l'Aïd"],
+                options: ["NullPointerException", "ArrayIndexOutOfBounds", "Le bouton 'Valider' ne marche pas", "Le site plante pendant le Ramadan"],
                 correct: 3,
                 emoji: "🕋💥",
-                joke: "Vrai story : le site de la CNSS pendant le Ramadan = 404 Not Found."
+                joke: "Vrai story : le site de la CNSS pendant le Ramadan."
             },
             {
                 question: "Que dirait un Français en voyant un test automatisé marocain ?",
-                options: ["C'est bien !", "C'est trop lent", "Pourquoi il y a un GIF de chameau qui clique ?", "C'est magique, mais je comprends rien"],
+                options: ["C'est bien !", "C'est trop lent", "Pourquoi il y a un GIF de chameau ?", "C'est magique !"],
                 correct: 2,
                 emoji: "🐪💻",
-                joke: "Parce que oui, il y a un GIF de chameau qui fait tout le travail."
+                joke: "Parce que oui, il y a un GIF de chameau qui clique à ta place."
             },
             {
                 question: "Quel est le meilleur framework pour tester la patience d’un développeur ?",
                 options: ["JUnit", "Selenium", "JIRA", "Un client qui change d’avis toutes les 5 minutes"],
                 correct: 3,
                 emoji: "😤🔄",
-                joke: "Spoiler : le client gagne toujours. Même contre Selenium + 10 cafés."
+                joke: "Spoiler : le client gagne toujours. Même contre Selenium."
             }
         ];
 
@@ -443,11 +443,11 @@
         let timer;
         let timeLeft = 30;
         const ADMIN_PASSWORD = "admin123";
-        const STORAGE_KEY_PLAYERS = "quizz_players_" + Math.random().toString(36).substring(2, 9); // Clé unique pour éviter les conflits
-        const STORAGE_KEY_ANSWERS = "quizz_answers_" + Math.random().toString(36).substring(2, 9);
-        const STORAGE_KEY_SCORES = "quizz_scores_" + Math.random().toString(36).substring(2, 9);
-        const STORAGE_KEY_GAME_STARTED = "quizz_game_started_" + Math.random().toString(36).substring(2, 9);
-        const STORAGE_KEY_CURRENT_QUESTION = "quizz_current_question_" + Math.random().toString(36).substring(2, 9);
+        const STORAGE_KEY_PLAYERS = "quizz_players";
+        const STORAGE_KEY_ANSWERS = "quizz_answers";
+        const STORAGE_KEY_SCORES = "quizz_scores";
+        const STORAGE_KEY_GAME_STARTED = "quizz_game_started";
+        const STORAGE_KEY_CURRENT_QUESTION = "quizz_current_question";
 
         // ========== ÉLÉMENTS DOM ==========
         const welcomeDiv = document.getElementById('welcome');
@@ -553,7 +553,6 @@
         function backToWelcome() {
             adminConnected = false;
             gameStarted = false;
-            currentQuestion = 0;
             adminPanelDiv.classList.add('hidden');
             adminLoginDiv.classList.add('hidden');
             resultsDiv.classList.add('hidden');
@@ -752,12 +751,17 @@
             answers = {};
             gameStarted = false;
             currentQuestion = 0;
-            saveToStorage();
             adminPanelDiv.classList.add('hidden');
             quizDiv.classList.add('hidden');
             resultsDiv.classList.add('hidden');
             waitingRoomDiv.classList.add('hidden');
             welcomeDiv.classList.remove('hidden');
+            // Réinitialiser le localStorage
+            localStorage.removeItem(STORAGE_KEY_PLAYERS);
+            localStorage.removeItem(STORAGE_KEY_ANSWERS);
+            localStorage.removeItem(STORAGE_KEY_SCORES);
+            localStorage.removeItem(STORAGE_KEY_GAME_STARTED);
+            localStorage.removeItem(STORAGE_KEY_CURRENT_QUESTION);
             updateAdminPanel();
         }
 
@@ -788,8 +792,6 @@
             } else if (players.includes(playerName)) {
                 waitingRoomDiv.classList.remove('hidden');
                 updateWaitingRoom();
-            } else {
-                welcomeDiv.classList.remove('hidden');
             }
         };
     </script>
